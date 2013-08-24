@@ -1,0 +1,255 @@
+*{
+    padding : 0;
+    margin : 0;
+}
+
+svg{
+	position : relative;
+	background : white
+}
+
+svg text{
+	font-family: Junction;
+}
+
+.placeHolder{
+	display : inline-block;
+}
+
+@font-face{
+    font-family: Junction;
+    src: url('fonts/Junction.otf');
+}
+
+@font-face{
+    font-family: Outstanding;
+    src: url('fonts/Outstanding.otf');
+}
+
+@font-face{
+    font-family: Bira;
+    src: url('fonts/Bira_PERSONAL_USE_ONLY.ttf');
+}
+
+@font-face{
+    font-family: LondrinaSolid;
+    src: url('fonts/LondrinaSolid.ttf');
+}
+
+@-webkit-keyframes zoom /* Safari and Chrome */
+{
+    100% {
+        fill:rgb(0,0,0);
+    }
+}
+
+circle:hove{
+    animation: zoom 1s;
+    -moz-animation: zoom 1s; /* Firefox */
+    -webkit-animation: zoom 1s; /* Safari and Chrome */
+    -webkit-animation-iteration-count : infinite;
+    -o-animation: zoom 1s; /* Opera */
+}
+
+.toolTip{
+    display: block;
+    border-radius : 5px;
+    background: white;
+    border : 1px solid black;
+    font-size: 15px;
+    position : absolute;
+    padding : 5px;
+    font-family: Junction;
+    font-weight: bold;
+	z-index: 1000;
+    -moz-box-shadow: 0 0 5px #888;
+    -webkit-box-shadow: 0 0 5px#888;
+    box-shadow: 0 0 5px #888;
+}
+
+text.title{
+    font-family: LondrinaSolid;
+    font-size: 30px;
+    color : black
+}
+
+.zoom-button{
+	display : block;
+	float : right;
+	width : 20px;
+	height : 20px;
+	background : transparent url('pics/Full-Screen.png') 0 0 no-repeat;
+}
+
+/* To be merged with the top one */
+.zoomout-button{
+	display : block;
+	float : right;
+	width : 20px;
+	height : 20px;
+	background : transparent url('pics/Exit-Full-Screen.png') 0 0 no-repeat;
+}
+
+.zoom-button:hover, .zoomout-button:hover{cursor : pointer}
+
+#Full-Screen-Holder{
+	position : absolute;
+	display : block;
+	width : 100%;
+	height : 100%;
+	opacity : 0.5;
+	background : black;
+	padding : 20px;
+}
+
+#Full-Screen-Chart-Holder{
+	display : block;
+	height : 100%;
+	background : white;
+}
+
+#placeHolder{
+	position : relative;
+}
+
+.description-holder{
+	font-family : Junction;
+	color : white;
+	display:inline-block;
+	width : 250px;
+	position: absolute;
+	top : 10px;
+	left : 10px;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
+	z-index:100;
+	border-radius : 5px;
+}
+	
+	.description-holder .Pointer-Circle{
+		position : absolute;
+		display : block;
+		width : 7px;
+		height : 7px;
+		top : 23px;
+		left : -27px;
+		background : grey;
+		border-radius : 6px;
+	}
+	
+	.description-holder .Pointer-Line{
+		position : absolute;
+		display : block;
+		width : 22px;
+		height : 3px;
+		top : 25px;
+		left : -22px;
+		background : grey;
+		-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px#888;
+	box-shadow: 0 0 5px #888;
+	}
+
+	.description-holder .window-options{
+		display : block;
+		height : 20px;
+		background : gray;
+	}
+	
+	.close-Button{
+		float : right;
+		display : block;
+		height : 16px;
+		width : 16px;
+		margin : 2px 10px;
+		background : url('pics/close-icon.gif');
+		border-radius : 1px;
+		cursor : pointer;
+	}
+	
+	.description-holder .description{
+		margin : 5px 5px 5px 5px;
+		/*Need to be by the screen size*/
+		max-height : 400px;
+		padding : 5px;
+		clear : both;
+	}
+
+#Stop-Scroll{
+	height: 100%;
+  overflow: hidden;
+}
+
+.checkbox-wrapp{
+	display : block;
+	position : relative;
+}
+
+.checkbox-holder{
+	margin : 0 auto;
+
+}
+/*beta version*/
+
+.cbWrapp{
+	display : inline-block;
+	float : left; 
+	position : relative;
+	margin-right : 10px
+}
+
+input.regular-checkbox{
+display : none;
+}
+
+div.checkBoxColor{
+	display : block;
+	width : 10px;
+	height : 10px;
+	float : left;
+	position : absolute;
+	z-index : -1;
+	top : 6px
+}
+
+input.regular-checkbox + label{
+	maargin-left : -10px;
+	padding : 5px 5px 5px 20px
+}
+
+div.checkBoxColor + input.regular-checkbox + label {
+    height:19px;
+    vertical-align:middle;
+    cursor:pointer;
+	font-family: Junction;
+	background-color : transparent!important
+}
+
+div.checkBoxColor + input.regular-checkbox:checked + label{
+	background : white;
+	background-image : url('pics/checked_checkbox.png');
+	background-repeat : no-repeat;
+	background-position : 1px 5px
+}
+
+
+
+input[type=checkbox]{
+	background : red
+}
+
+#Full-Screen{
+	display : block;
+	background : white;
+	width : 100%;
+	height : 50px;
+	position : fixed;
+	top : 0;
+	left : 0;
+	z-index:999
+}
+	
+	#Full-Screen	#Close-Button{
+		margin : 5px 30px 0 0;
+	}
