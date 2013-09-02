@@ -11,17 +11,19 @@ Charting
 
 Simply add the following line in the bottom of the HTML5 page:
 
+```
 <script src="gako.js"></script>
-
+```
 * src is filled with the path to the library
 
 
 After that  create some div element with uniqe id, which will contain the chart.
 For example:
+```
 <div id="Chart1"></div>
-
+```
 And now for the real stuff. The chart is created by calling the constructor of the graphChart class(function) in the gako namespace and creating new chart object.
-
+```
 var chart1 = new gako.graphChart({
         placeHolder : "Chart1",
         title : 'Chart Title',
@@ -48,3 +50,4 @@ var chart1 = new gako.graphChart({
     });
 
 chart1.build(); 
+```
