@@ -12,6 +12,14 @@ svg text{
 	font-family: Junction;
 }
 
+.placeHolder .title{
+    display: block;
+    text-align: center;
+    font-family: Junction;
+    font-size: 25px;
+    padding: 10px 0 0 0;
+}
+
 .placeHolder{
 	display : inline-block;
 }
@@ -41,14 +49,6 @@ svg text{
     100% {
         fill:rgb(0,0,0);
     }
-}
-
-circle:hove{
-    animation: zoom 1s;
-    -moz-animation: zoom 1s; /* Firefox */
-    -webkit-animation: zoom 1s; /* Safari and Chrome */
-    -webkit-animation-iteration-count : infinite;
-    -o-animation: zoom 1s; /* Opera */
 }
 
 .toolTip{
@@ -156,7 +156,12 @@ text.title{
 		height : 20px;
 		background : gray;
 	}
-	
+
+.descMenuWrappBox {
+    display: block;
+    margin:  5px;
+    background-color: white;
+}
 	.close-Button{
 		float : right;
 		display : block;
