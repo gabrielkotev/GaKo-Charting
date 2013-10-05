@@ -68,6 +68,7 @@ gako.graphChart = function (params) {
     this.addAxisX = params.addAxisX;
     this.addAxisY = params.addAxisY;
     this.zeroPosition = 0;
+    this.unitString = params.unitString;
     this.toolTip = gako.utility.createToolTip(params);
     this.infoLine = gako.utility.createInfoLine(params);
     this.detailsBox = gako.utility.createDetailsBox(this);
@@ -916,6 +917,11 @@ gako.utility = function (params) {
             counter = 0;
         chartObject.stripesPadding = 50; // There is a bug when the content is  bigger than the exis - need to be dynamic - Need to be removed from here
 
+        var unitString = '{@}';
+        if ( chartObject.unitString ) {
+            unitString = chartObject.unitString;
+        }
+        
         for ( var y = chartObject.padding.bottom + chartObject.stripesPadding; y < ( height - chartObject.padding.top ) ; y += chartObject.stripesPadding ) {
             counter++;
             maxHeight += chartObject.stripesPadding;
@@ -928,7 +934,7 @@ gako.utility = function (params) {
             docFrag.appendChild( line );
 
             var UnitNum = document.createElementNS( w3spec, 'text' );
-            var title = document.createTextNode( counter * chartObject.yRange + startValue );
+            var title = document.createTextNode( unitString.replace( '{@}', counter * chartObject.yRange + startValue ) );
             UnitNum.setAttribute( 'x', chartObject.padding.left - ( axisMark / 2 ) - 5 );
             UnitNum.setAttribute( 'y', height - y + 5 );
             UnitNum.setAttribute( 'fill', 'black' );
