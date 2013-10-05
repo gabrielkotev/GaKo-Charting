@@ -50,6 +50,14 @@ var addCircleLine = 'addCircleLine',
 
 gako.graphChart = function (params) {
 
+    //Config
+    this.padding = {
+        top: 0,
+        left: 50,
+        bottom: 20,
+        right: 10
+    };
+
     //Public
     this.placeHolder = document.getElementById(params.placeHolder);
     this.chartWidth = params.width;
@@ -60,7 +68,6 @@ gako.graphChart = function (params) {
     this.addAxisX = params.addAxisX;
     this.addAxisY = params.addAxisY;
     this.zeroPosition = 0;
-    this.padding = 40;
     this.toolTip = gako.utility.createToolTip(params);
     this.infoLine = gako.utility.createInfoLine(params);
     this.detailsBox = gako.utility.createDetailsBox(this);
@@ -157,21 +164,21 @@ gako.graphChart.prototype[addCircleLine] = function (/* JSON, obj, array */conte
     var g = document.createElementNS(gako.utility.w3spec, 'g'),
         nodeFragment = document.createDocumentFragment(),
         padding = this.padding,
-        posX = padding,
+        posX = padding.left,
         posY = 0,
-        spaceX = (this.chartWidth - 2 * padding) / (_content.values.length - 1),
+        spaceX = (this.chartWidth - this.padding.left - this.padding.right) / (_content.values.length - 1),
         points = '',
         pointsX = [],
         pointsY = [];
 
-    var totalContentSum = 0;
+    //var totalContentSum = 0;
     for (var i in _content.values) {
-        posY = this.chartHeight - ((_content.values[i] / this.yRange) * (this.stripesPadding)) - padding;
+        posY = this.chartHeight - ((_content.values[i] / this.yRange) * (this.stripesPadding)) - padding.top - padding.bottom;
         points += ' ' + posX + ',' + posY;
         pointsX.push(posX);
         pointsY.push(posY);
         posX += spaceX;
-        totalContentSum += _content.values[i];
+        //totalContentSum += _content.values[i];
     }
 
     chartFigure.chartLine.setAttribute('points', points);
@@ -440,9 +447,9 @@ gako.graphChart.prototype[addGraph] = function (/*Array*/content) {
 
     var 
         g = document.createElementNS(gako.utility.w3spec, 'g'),
-        posX = padding,
+        posX = padding.left,
         posY = 0,
-        spaceX = (this.chartWidth - 2 * padding) / (_content.values.length - 1),
+        spaceX = ( this.chartWidth - this.padding.left - this.padding.right ) / ( _content.values.length - 1 ),
         points = '',
 		animatePoints = '',
         pointsX = [], // Need to be modify to points[i].x points[i].y
@@ -460,9 +467,9 @@ gako.graphChart.prototype[addGraph] = function (/*Array*/content) {
     });
 
     for (var i in _content.values) {
-        posY = this.chartHeight - ((_content.values[i] / this.yRange) * (this.stripesPadding)) - padding;
+        posY = this.chartHeight - ((_content.values[i] / this.yRange) * (this.stripesPadding)) - padding.top - padding.bottom;
         points += ' ' + posX + ',' + posY;
-        animatePoints += ' ' + posX + ',' + (this.chartHeight - padding);
+        animatePoints += ' ' + posX + ',' + (this.chartHeight - padding.top - padding.bottom);
         pointsX.push(posX);
         pointsY.push(posY);
         posX += spaceX;
@@ -543,9 +550,9 @@ gako.graphChart.prototype[addGraph] = function (/*Array*/content) {
     }
 
     //(x,0)
-    points += ' ' + pointsX[pointsX.length - 1] + ',' + (this.chartHeight - padding);
+    points += ' ' + pointsX[pointsX.length - 1] + ',' + (this.chartHeight - padding.top - padding.bottom);
     //(0,0)
-    points += ' ' + padding + ',' + (this.chartHeight - padding);
+    points += ' ' + padding.left + ',' + (this.chartHeight - padding.top - padding.bottom);
 
     chartFigure.chartFill.setAttribute('points', points);
     chartFigure.chartFill.setAttribute('fill', chartFigure.color);
@@ -705,7 +712,7 @@ gako.graphChart.prototype.build = function () {
     if (hasNegative) {
         //Position of the zeroo !!!!!!!!!!!!!!!!!!!
         this.zeroPosition = this.chartHeight - ((maxValue / this.yRange) * (this.stripesPadding)) + this.stripesPadding;
-        positionByZero = -this.chartHeight + this.zeroPosition;
+        positionByZero = - this.chartHeight + this.zeroPosition;
     }
 
     if (hasNegative && !hasPositive) {
@@ -804,7 +811,6 @@ gako.graphChart.prototype.buildInFullScreen = function () {
 gako.utility = function (params) {
 
     var w3spec = 'http://www.w3.org/2000/svg',
-        padding = 40,
         axisMark = 6;
 
     /* chartObject param refers to the instance of the chart class - pass 'this' 
@@ -863,20 +869,20 @@ gako.utility = function (params) {
         return { x: x, y: y };
     };
 
-    var addAxisX = function (_this, addUnits) {
+    var addAxisX = function (chartObject, addUnits) {
 
-        var svg = _this.chart.svg,
-            height = _this.chartHeight,
-            width = _this.chartWidth;
+        var svg = chartObject.chart.svg,
+            height = chartObject.chartHeight,
+            width = chartObject.chartWidth;
 
         var lineWrapp = document.createElementNS(w3spec, 'g');
 
         //Building the axis line
         var axis = document.createElementNS(w3spec, 'line');
-        axis.setAttribute('x1', padding);
-        axis.setAttribute('y1', height - padding);
-        axis.setAttribute('x2', width - padding);
-        axis.setAttribute('y2', height - padding);
+        axis.setAttribute('x1', chartObject.padding.left);
+        axis.setAttribute('y1', height - chartObject.padding.bottom);
+        axis.setAttribute('x2', width - chartObject.padding.right);
+        axis.setAttribute('y2', height - chartObject.padding.bottom);
         axis.setAttribute('stroke', 'black');
 
         if (addUnits) {
@@ -887,79 +893,55 @@ gako.utility = function (params) {
         return true;
     };
 
-    var addAxisY = function (_this, startValue) {
+    var addAxisY = function ( chartObject, startValue ) {
 
-        var svg = _this.chart.svg,
-            height = _this.chartHeight,
-            width = _this.chartWidth,
-            maxHeight = _this.maxHeight;
+        var svg = chartObject.chart.svg,
+            height = chartObject.chartHeight,
+            width = chartObject.chartWidth,
+            maxHeight = chartObject.maxHeight;
 
-        var lineWrapp = document.createElementNS(w3spec, 'g');
+        var lineWrapp = document.createElementNS( w3spec, 'g' );
 
         //Building the axis line
-        var axis = document.createElementNS(w3spec, 'line');
-        axis.setAttribute('x1', padding);
-        axis.setAttribute('y1', padding);
-        axis.setAttribute('x2', padding);
-        axis.setAttribute('y2', height - padding);
-        axis.setAttribute('stroke', 'black');
+        var axis = document.createElementNS( w3spec, 'line' );
+        axis.setAttribute( 'x1', chartObject.padding.left );
+        axis.setAttribute( 'y1', chartObject.padding.top );
+        axis.setAttribute( 'x2', chartObject.padding.left );
+        axis.setAttribute( 'y2', height - chartObject.padding.bottom );
+        axis.setAttribute( 'stroke', 'black' );
 
         //Building the unit marks
         var maxHeight = 0,
             docFrag = document.createDocumentFragment(),
             counter = 0;
-        _this.stripesPadding = 50; // There is a bug when the content is  bigger than the exis - need to be dynamic - Need to be removed from here
+        chartObject.stripesPadding = 50; // There is a bug when the content is  bigger than the exis - need to be dynamic - Need to be removed from here
 
-        /* for (var y = padding + _this.stripesPadding; y < (height - padding); y += _this.stripesPadding) {
-        counter++;
-        maxHeight += _this.stripesPadding;
-        var line = document.createElementNS(w3spec, 'line');
-        line.setAttribute('x1', padding - (axisMark / 2));
-        line.setAttribute('y1', height - y);
-        line.setAttribute('x2', padding + (axisMark / 2));
-        line.setAttribute('y2', height - y);
-        line.setAttribute('stroke', 'black');
-        docFrag.appendChild(line);
-
-        var UnitNum = document.createElementNS(w3spec, 'text');
-        var title = document.createTextNode(counter * _this.yRange);
-        UnitNum.setAttribute('x', padding - (axisMark / 2) - 5);
-        UnitNum.setAttribute('y', height - y + 5);
-        UnitNum.setAttribute('fill', 'black');
-        UnitNum.setAttribute("text-anchor", "end");
-        //UnitNum.setAttribute('class', 'title');
-        //UnitNum.innerHTML = _this.title;
-        UnitNum.appendChild(title);
-        _this.chart.svg.appendChild(UnitNum);
-
-        }*/
-
-        for (var y = padding + _this.stripesPadding; y < (height - padding); y += _this.stripesPadding) {
+        for ( var y = chartObject.padding.bottom + chartObject.stripesPadding; y < ( height - chartObject.padding.top ) ; y += chartObject.stripesPadding ) {
             counter++;
-            maxHeight += _this.stripesPadding;
-            var line = document.createElementNS(w3spec, 'line');
-            line.setAttribute('x1', padding - (axisMark / 2));
-            line.setAttribute('y1', height - y);
-            line.setAttribute('x2', padding + (axisMark / 2));
-            line.setAttribute('y2', height - y);
-            line.setAttribute('stroke', 'black');
-            docFrag.appendChild(line);
+            maxHeight += chartObject.stripesPadding;
+            var line = document.createElementNS( w3spec, 'line' );
+            line.setAttribute( 'x1', chartObject.padding.left - ( axisMark / 2 ) );
+            line.setAttribute( 'y1', height - y );
+            line.setAttribute( 'x2', chartObject.padding.left + ( axisMark / 2 ) );
+            line.setAttribute( 'y2', height - y );
+            line.setAttribute( 'stroke', 'black' );
+            docFrag.appendChild( line );
 
-            var UnitNum = document.createElementNS(w3spec, 'text');
-            var title = document.createTextNode(counter * _this.yRange + startValue);
-            UnitNum.setAttribute('x', padding - (axisMark / 2) - 5);
-            UnitNum.setAttribute('y', height - y + 5);
-            UnitNum.setAttribute('fill', 'black');
-            UnitNum.setAttribute("text-anchor", "end");
-            UnitNum.appendChild(title);
-            _this.chart.svg.appendChild(UnitNum);
+            var UnitNum = document.createElementNS( w3spec, 'text' );
+            var title = document.createTextNode( counter * chartObject.yRange + startValue );
+            UnitNum.setAttribute( 'x', chartObject.padding.left - ( axisMark / 2 ) - 5 );
+            UnitNum.setAttribute( 'y', height - y + 5 );
+            UnitNum.setAttribute( 'fill', 'black' );
+            UnitNum.setAttribute( "text-anchor", "end" );
+            UnitNum.appendChild( title );
+            chartObject.chart.svg.appendChild( UnitNum );
 
         }
 
-        _this.maxHeight = maxHeight;
-        svg.appendChild(axis);
-        lineWrapp.appendChild(docFrag);
-        svg.appendChild(lineWrapp);
+        chartObject.maxHeight = maxHeight;
+        svg.appendChild( axis );
+        lineWrapp.appendChild( docFrag );
+        svg.appendChild( lineWrapp );
         return true;
     };
 
@@ -1057,7 +1039,6 @@ gako.utility = function (params) {
                 var lineLength = 22,
 					circleD = 8,
 					pointerLength = lineLength + circleD;
-                var pagePadding = 20; //Need to be in consts module
 
                 //Problem that the elemnt go and creates more of the page vertically
                 var elementBottomPoint =
@@ -1155,27 +1136,140 @@ gako.utility = function (params) {
         return infoLine;
     }
 
-    var getAbsolutePosition = function (ele) {
-        if (ele.getBoundingClientRect) {
+    var getAbsolutePosition = function (element) {
+        //if (ele.getBoundingClientRect) {
 
-            //Problem with scroll on firefox - This peace of code should be put outside in method
-            var viewportElement, sUsrAg = navigator.userAgent;
-            if (sUsrAg.indexOf("Firefox") > -1) {
-                viewportElement = document.documentElement;
-            } else {
-                viewportElement = document.body;
-            }
+        //    //Problem with scroll on firefox - This peace of code should be put outside in method
+        //    var viewportElement, sUsrAg = navigator.userAgent;
+        //    if (sUsrAg.indexOf("Firefox") > -1) {
+        //        viewportElement = document.documentElement;
+        //    } else {
+        //        viewportElement = document.body;
+        //    }
 
-            var box = ele.getBoundingClientRect(),
-			scrollLeft = viewportElement.scrollLeft,
-			scrollTop = viewportElement.scrollTop;
+        //    var box = ele.getBoundingClientRect(),
+		//	scrollLeft = viewportElement.scrollLeft,
+		//	scrollTop = viewportElement.scrollTop;
 
-            var left = box.left + scrollLeft,
-				top = box.top + scrollTop;
+        //    var left = box.left + scrollLeft,
+		//		top = box.top + scrollTop;
+            
+            
 
-            return { top: top, left: left };
+        //    return { top: top, left: left };
+        //}
+        
+        //return {}
+
+        var userAgent = navigator.userAgent;
+        var isIE = navigator.appVersion.match( /MSIE/ ) != null;
+        var IEVersion = getIEVersion();
+        var isIENew = isIE && IEVersion >= 8;
+        var isIEOld = isIE && !isIENew;
+
+        var isFireFox = userAgent.match( /firefox/i ) != null;
+        var isFireFoxOld = isFireFox && ( ( userAgent.match( /firefox\/2./i ) != null ) ||
+            ( userAgent.match( /firefox\/1./i ) != null ) );
+        var isFireFoxNew = isFireFox && !isFireFoxOld;
+
+        var isWebKit = navigator.appVersion.match( /WebKit/ ) != null;
+        var isChrome = navigator.appVersion.match( /Chrome/ ) != null;
+        var isOpera = window.opera != null;
+        var operaVersion = getOperaVersion();
+        var isOperaOld = isOpera && ( operaVersion < 10 );
+
+        var res = {
+            x: 0,
+            y: 0
+        };
+
+        if ( element.getBoundingClientRect ) {
+            var viewportElement = document.documentElement;
+            var box = element.getBoundingClientRect();
+            var scrollLeft = viewportElement.scrollLeft;
+            var scrollTop = viewportElement.scrollTop;
+
+            res.x = box.left + scrollLeft;
+            res.y = box.top + scrollTop;
+
         }
-        return {}
+        else { //for old browsers
+            res.x = element.offsetLeft;
+            res.y = element.offsetTop;
+
+            var parentNode = element.parentNode;
+            var borderWidth = null;
+
+            while ( offsetParent != null ) {
+                res.x += offsetParent.offsetLeft;
+                res.y += offsetParent.offsetTop;
+
+                var parentTagName =
+                    offsetParent.tagName.toLowerCase();
+
+                if ( ( __isIEOld && parentTagName != "table" ) ||
+                    ( ( __isFireFoxNew || __isChrome ) &&
+                        parentTagName == "td" ) ) {
+                    borderWidth = kGetBorderWidth
+                            ( offsetParent );
+                    res.x += borderWidth.left;
+                    res.y += borderWidth.top;
+                }
+
+                if ( offsetParent != document.body &&
+                offsetParent != document.documentElement ) {
+                    res.x -= offsetParent.scrollLeft;
+                    res.y -= offsetParent.scrollTop;
+                }
+
+
+                //next lines are necessary to fix the problem 
+                //with offsetParent
+                if ( !__isIE && !__isOperaOld || __isIENew ) {
+                    while ( offsetParent != parentNode &&
+                        parentNode !== null ) {
+                        res.x -= parentNode.scrollLeft;
+                        res.y -= parentNode.scrollTop;
+                        if ( __isFireFoxOld || __isWebKit ) {
+                            borderWidth =
+                             kGetBorderWidth( parentNode );
+                            res.x += borderWidth.left;
+                            res.y += borderWidth.top;
+                        }
+                        parentNode = parentNode.parentNode;
+                    }
+                }
+
+                parentNode = offsetParent.parentNode;
+                offsetParent = offsetParent.offsetParent;
+            }
+        }
+
+
+        if ( isWebKit === true ) {
+            res.x += window.scrollX;
+            res.y += window.scrollY;
+        }
+
+        return { top: res.y, left: res.x }
+    }
+
+    var getIEVersion = function () {
+        var rv = -1; // Return value assumes failure.
+        if ( navigator.appName == 'Microsoft Internet Explorer' ) {
+            var ua = navigator.userAgent;
+            var re = new RegExp( "MSIE ([0-9]{1,}[\.0-9]{0,})" );
+            if ( re.exec( ua ) != null )
+                rv = parseFloat( RegExp.$1 );
+        }
+        return rv;
+    }
+
+    var getOperaVersion = function () {
+        if ( window.opera ) {
+            var sver = window.opera.version();
+            rv = parseFloat( sver );
+        }
     }
 
     var addTitle = function (chartObj) {
@@ -1203,7 +1297,6 @@ gako.utility = function (params) {
 
     return {
         w3spec: w3spec,
-        padding: padding,
         createChart: createChart,
         polarPosition: polarPosition,
         addAxisX: addAxisX,
