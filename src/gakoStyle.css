@@ -9,13 +9,12 @@ svg{
 }
 
 svg text{
-	font-family: Junction;
+	
 }
 
 .placeHolder .title{
     display: block;
     text-align: center;
-    font-family: Junction;
     font-size: 25px;
     padding: 10px 0 0 0;
 }
@@ -24,32 +23,6 @@ svg text{
 	display : inline-block;
 }
 
-@font-face{
-    font-family: Junction;
-    src: url('fonts/Junction.otf');
-}
-
-@font-face{
-    font-family: Outstanding;
-    src: url('fonts/Outstanding.otf');
-}
-
-@font-face{
-    font-family: Bira;
-    src: url('fonts/Bira_PERSONAL_USE_ONLY.ttf');
-}
-
-@font-face{
-    font-family: LondrinaSolid;
-    src: url('fonts/LondrinaSolid.ttf');
-}
-
-@-webkit-keyframes zoom /* Safari and Chrome */
-{
-    100% {
-        fill:rgb(0,0,0);
-    }
-}
 
 .toolTip{
     display: block;
@@ -59,7 +32,6 @@ svg text{
     font-size: 15px;
     position : absolute;
     padding : 5px;
-    font-family: Junction;
     font-weight: bold;
 	z-index: 1000;
     -moz-box-shadow: 0 0 5px #888;
@@ -68,7 +40,6 @@ svg text{
 }
 
 text.title{
-    font-family: LondrinaSolid;
     font-size: 30px;
     color : black
 }
@@ -81,7 +52,6 @@ text.title{
 	background : transparent url('pics/Full-Screen.png') 0 0 no-repeat;
 }
 
-/* To be merged with the top one */
 .zoomout-button{
 	display : block;
 	float : right;
@@ -113,7 +83,6 @@ text.title{
 }
 
 .description-holder{
-	font-family : Junction;
 	color : white;
 	display:inline-block;
 	width : 250px;
@@ -227,7 +196,6 @@ div.checkBoxColor + input.regular-checkbox + label {
     height:19px;
     vertical-align:middle;
     cursor:pointer;
-	font-family: Junction;
 	background-color : transparent!important
 }
 
